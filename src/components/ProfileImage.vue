@@ -2,7 +2,7 @@
 	<img
 		class="x-8 h-8 rounded-3xl object-contain"
 		:src="imageLink"
-		alt="Legend of Zelda"
+		alt="User profile image"
 	/>
 </template>
 

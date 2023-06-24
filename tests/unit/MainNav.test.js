@@ -4,14 +4,23 @@ import userEvent from '@testing-library/user-event';
 import MainNav from '@/components/MainNav.vue';
 
 describe('MainNav', () => {
+	const renderMainNav = () => {
+		render(MainNav, renderMainNav());
+	};
 	it('displays company name', () => {
-		render(MainNav);
+		render(MainNav, {
+			global: {
+				stubs: {
+					FontAwesomeIcon: true,
+				}
+			},
+		});
 		const companyName = screen.getByText('Doodle Careers');
 		expect(companyName).toBeInTheDocument();
 	});
 
 	it('displays menu items for navigation', () => {
-		render(MainNav);
+		render(MainNav, renderMainNav());
 		const navigationMenuItems = screen.getAllByRole('listitem');
 
 		console.log(navigationMenuItems);
@@ -27,7 +36,7 @@ describe('MainNav', () => {
 
 	describe('When the user logs in', () => {
 		it('displays user profile picture', async () => {
-			render(MainNav);
+			render(MainNav, renderMainNav());
 			// screen.getByRole('img')
 			let profileImage = screen.queryByRole('img', {
 				name: /user profile image/i,

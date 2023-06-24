@@ -35,6 +35,7 @@
 					/>
 				</div>
 			</div>
+			<the-subnav v-if="isLoggedIn" />
 		</div>
 	</header>
 </template>
@@ -42,13 +43,15 @@
 <script>
 	// Use options API for now, instead of the Vue 3 composition API.
 	import ActionButton from '@/components/ActionButton.vue';
-	import ProfileImage from './ProfileImage.vue';
+	import ProfileImage from '@/components/ProfileImage.vue';
+	import TheSubnav from '@/components/TheSubnav.vue';
 
 	export default {
 		name: 'MainNav',
 		components: {
 			ActionButton,
 			ProfileImage,
+			TheSubnav,
 		},
 		data() {
 			return {

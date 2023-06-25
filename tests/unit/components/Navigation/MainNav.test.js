@@ -1,27 +1,27 @@
 import { render, screen } from '@testing-library/vue';
 import userEvent from '@testing-library/user-event';
 
-import MainNav from '@/components/MainNav.vue';
+import MainNav from '@/components/Navigation/MainNav.vue';
 
 describe('MainNav', () => {
 	const renderMainNav = () => {
-    render(MainNav, {
-      global: {
-        stubs: {
-          FontAwesomeIcon: true,
-        },
-      },
-    });
-  };
+		render(MainNav, {
+			global: {
+				stubs: {
+					FontAwesomeIcon: true,
+				},
+			},
+		});
+	};
 
 	it('displays company name', () => {
-		renderMainNav()
+		renderMainNav();
 		const companyName = screen.getByText('Doodle Careers');
 		expect(companyName).toBeInTheDocument();
 	});
 
 	it('displays menu items for navigation', () => {
-		renderMainNav()
+		renderMainNav();
 		const navigationMenuItems = screen.getAllByRole('listitem');
 
 		console.log(navigationMenuItems);

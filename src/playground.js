@@ -1,13 +1,7 @@
-const developer = {
-  name: 'Me',
-  salary: 100000,
-  experience: 4.5,
-  techStack: ['Vue', 'HTML', "CSS"],
-  lookingForWork: true,
-  doubleSalary() {
-    this.salary = this.salary * 2;
-    return this.salary;
-  }
-};
+const interval = setInterval(() => {
+console.log(`Execute every 2 seconds...`)
+}, 2000);
 
-console.log(developer.doubleSalary());
+setTimeout(() => {
+  clearInterval(interval);
+}, 10000)

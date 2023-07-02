@@ -4,23 +4,23 @@
 			<div
 				class="mx-auto flex h-full flex-nowrap border-b border-solid border-brand-gray-1 px-8"
 			>
-				<a
-					:href="url"
-					target="_blank"
+				<router-link
+					:to="{ name: 'Home' }"
 					class="flex h-full items-center text-xl"
-					>{{ company }}</a
 				>
+					Doodle Careers
+				</router-link>
 				<nav class="ml-12 h-full">
 					<ul class="flex h-full list-none">
 						<li
 							class="ml-9 h-full"
 							v-for="menuItem in menuItems"
-							v-bind:key="menuItem"
+							v-bind:key="menuItem.text"
 						>
-							<a
-								href="#"
+							<router-link
+								:to="menuItem.url"
 								class="flex h-full items-center py-2.5"
-								>{{ menuItem }}</a
+								>{{ menuItem.text }}</router-link
 							>
 						</li>
 					</ul>
@@ -55,15 +55,13 @@
 		},
 		data() {
 			return {
-				company: 'Doodle Careers',
-				url: 'https://careers.google.com',
 				menuItems: [
-					'Teams',
-					'Locations',
-					'Life at Doodle Corp',
-					'How we hire',
-					'Students',
-					'Jobs',
+					{ text: 'Teams', url: '/teams' },
+					{ text: 'Locations', url: '/' },
+					{ text: 'Life at Doodle Corp', url: '/' },
+					{ text: 'How we hire', url: '/' },
+					{ text: 'Students', url: '/' },
+					{ text: 'Jobs', url: '/jobs/results' },
 				],
 				isLoggedIn: false,
 			};

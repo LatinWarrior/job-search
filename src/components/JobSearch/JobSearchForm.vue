@@ -1,6 +1,7 @@
 <template>
 	<form
 		class="flex h-12 w-full items-center rounded-3xl border border-solid border-brand-gray-3"
+		@submit.prevent="searchForJobs"
 	>
 		<font-awesome-icon
 			:icon="['fas', 'search']"
@@ -9,15 +10,14 @@
 		<div class="flex h-full flex-1 flex-nowrap text-base font-light">
 			<div class="relative flex h-full flex-1 items-center pr-3">
 				<label
-					for=""
+					for="role"
 					class="absolute -top-10 left-0"
 					>Role</label
 				>
-				<input
-					v-model="role"
-					type="text"
+				<text-input
+					id="role"
 					placeholder="Software engineer"
-					class="w-full text-lg font-normal focus:outline-none"
+					v-model="role"
 				/>
 			</div>
 			<span
@@ -27,15 +27,14 @@
 			</span>
 			<div class="relative flex h-full flex-1 items-center pl-3">
 				<label
-					for=""
+					for="location"
 					class="absolute -top-10 left-0"
 					>Where?</label
 				>
-				<input
-					v-model="location"
-					type="text"
+				<text-input
+					id="location"
 					placeholder="Los Angeles"
-					class="w-full text-lg font-normal focus:outline-none"
+					v-model="location"
 				/>
 			</div>
 		</div>
@@ -50,17 +49,36 @@
 
 <script>
 	import ActionButton from '@/components/Shared/ActionButton.vue';
+	import TextInput from '@/components/Shared/TextInput.vue';
 
 	export default {
 		name: 'JobSearchForm',
 		components: {
 			ActionButton,
+			TextInput,
 		},
 		data() {
 			return {
 				role: '',
 				location: '',
 			};
+		},
+		methods: {
+			// updateRole(payload) {
+			// 	this.role = payload;
+			// },
+			searchForJobs() {
+				this.$router.push({
+					name: 'JobResults',
+					query: {
+						role: this.role,
+						location: this.location,
+					},
+				});
+			},
+			// updateLocation(payload) {
+			// 	this.location = payload;
+			// },
 		},
 	};
 </script>

@@ -8,40 +8,169 @@ import JobListings from '@/components/JobResults/JobListings.vue';
 vi.mock('axios');
 
 describe('JobListings', () => {
+
+  const createRoute = (queryParams = {}) => ({
+    query: {
+      page: "5",
+      ...queryParams
+    }
+  });
+
+  const renderJobListings = ($routeMock) => {
+    render(JobListings, {
+      global: {
+        stubs: {
+          'router-link': RouterLinkStub // RouterLink: RouterLinkStub would also work.
+        },
+        mocks: {
+          $route: $routeMock,
+        }
+      },
+    });
+  };
+
   it('fetches jobs', () => {
 
     axios.get.mockResolvedValue({
       data: []
     });
 
-    render(JobListings, {
-      global: {
-        stubs: {
-          'router-link': RouterLinkStub
-        }
-      },
-    });
-    expect(axios.get).toHaveBeenCalledWith('http://localhost:3000/jobs');
+    const $routeMock = createRoute();
+
+    renderJobListings($routeMock);
+
+    expect(axios.get).toHaveBeenCalledWith('http://myfakeapi.com/jobs');
   });
 
-  it('creates a job listing for every job', async () => {
+  it('displays a maximum of 10 jobs', async () => {
 
     axios.get.mockResolvedValue({
       data: Array(15).fill({})
     });
 
-    render(JobListings, {
-      global: {
-        stubs: {
-          'router-link': RouterLinkStub // RouterLink: RouterLinkStub would also work.
-        }
-      },
-    });
+    const queryParams = { page: "1" };
+
+    const $routeMock = createRoute(queryParams);
+
+    renderJobListings($routeMock);
 
     // Use the Aria role of listitem.
     // findAllByRole is asynchronous. get methods are sync. find methods are async.
     const jobListings = await screen.findAllByRole('listitem');
 
-    expect(jobListings).toHaveLength(15);
+    expect(jobListings).toHaveLength(10);
   });
+
+  describe('when params exclude page number', () => {
+    it('displays page number 1', () => {
+
+      const queryParams = { page: undefined };
+
+      const $routeMock = createRoute(queryParams);
+
+      renderJobListings($routeMock);
+
+      expect(screen.getByText('Page 1')).toBeInTheDocument();
+    });
+  });
+
+  describe('when params exclude page number', () => {
+    it('displays page number', () => {
+
+      const queryParams = { page: "3" };
+
+      const $routeMock = createRoute(queryParams);
+
+      renderJobListings($routeMock);
+
+      expect(screen.getByText('Page 3')).toBeInTheDocument();
+
+    });
+  });
+
+  describe('when user is on first page', () => {
+
+    it('does not show link to previous page', async () => {
+
+      axios.get.mockResolvedValue({
+        data: Array(15).fill({})
+      });
+
+      const queryParams = { page: "1" };
+
+      const $routeMock = createRoute(queryParams);
+
+      renderJobListings($routeMock);
+
+      const jobListings = await screen.findAllByRole('listitem');
+
+      const previousLink = screen.queryByRole('link', { name: /previous/i });
+
+      expect(previousLink).not.toBeInTheDocument();
+
+    });
+
+    it('shows link to next page', async () => {
+
+      axios.get.mockResolvedValue({
+        data: Array(15).fill({})
+      });
+
+      const queryParams = { page: "1" };
+
+      const $routeMock = createRoute(queryParams);
+
+      renderJobListings($routeMock);
+
+      const jobListings = await screen.findAllByRole('listitem');
+
+      const nextLink = screen.queryByRole('link', { name: /next/i });
+
+      expect(nextLink).toBeInTheDocument();
+    });
+
+  });
+
+  describe('when user is on last page', () => {
+
+    it('does not show link', async () => {
+
+      axios.get.mockResolvedValue({
+        data: Array(15).fill({})
+      });
+
+      const queryParams = { page: "2" };
+
+      const $routeMock = createRoute(queryParams);
+
+      renderJobListings($routeMock);
+
+      const jobListings = await screen.findAllByRole('listitem');
+
+      const nextLink = screen.queryByRole('link', { name: /next/i });
+
+      expect(nextLink).not.toBeInTheDocument();
+
+    });
+
+    it('shows link to previous page', async () => {
+
+      axios.get.mockResolvedValue({
+        data: Array(15).fill({})
+      });
+
+      const queryParams = { page: "2" };
+
+      const $routeMock = createRoute(queryParams);
+
+      renderJobListings($routeMock);
+
+      const jobListings = await screen.findAllByRole('listitem');
+
+      const previousLink = screen.queryByRole('link', { name: /previous/i });
+
+      expect(previousLink).toBeInTheDocument();
+    });
+  });
+
 });
